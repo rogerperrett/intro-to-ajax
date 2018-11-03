@@ -74,37 +74,38 @@
 
 //=====================CLICK EVENT=====================
 
-  $('#generateDoggoBtn').click(clickDoggoBtn)
+//   $('#generateDoggoBtn').click(clickDoggoBtn)
 
-  //=====================GET JSON DATA AND DISABLE BUTTON (ADD MESSAGE TO BUTTON)=====================
+//   //=====================GET JSON DATA AND DISABLE BUTTON (ADD MESSAGE TO BUTTON)=====================
 
-  function clickDoggoBtn () {
-    console.log('you clicked the doggo button! fetching the JSON now..')
-    $.getJSON('https://dog.ceo/api/breeds/image/random', receiveRandomDog)
-    // $('#doggoContainer').getJSON('https://dog.ceo/api/breeds/image/random')
-    // $('#generateDoggoBtn').remove()
-    $('#generateDoggoBtn').html('Generating Doggo...').prop('disabled', true)
-  }
+//   function clickDoggoBtn () {
+//     console.log('you clicked the doggo button! fetching the JSON now..')
+//     $.getJSON('https://dog.ceo/api/breed/boxer/images/random', receiveRandomDog)
+//     // $('#doggoContainer').getJSON('https://dog.ceo/api/breeds/image/random')
+//     // $('#generateDoggoBtn').remove()
+//     $('#generateDoggoBtn').html('Generating Doggo...').prop('disabled', true)
+//   }
 
-//=====================GENERATE CLICK EVENT=====================
+// //=====================GENERATE CLICK EVENT=====================
 
-    function receiveRandomDog (data) { 
-    console.log('receive random dog: ')
-    console.log(data)
-    if(document.querySelectorAll("#doggoContainer img").length > 0) {     // if container has img
-      $('#doggoContainer').find('img').attr("src", data.message);         //then find the img src and change to data.message
-    $('#generateDoggoBtn').html('Generate Doggo').prop('disabled', false) //enable the button and name
-    console.log('replaced image')
+//     function receiveRandomDog (data) { 
+//     console.log('receive random dog: ')
+//     console.log(data)
+//     if(document.querySelectorAll("#doggoContainer img").length > 0) {     // if container has img
+//       $('#doggoContainer').find('img').attr("src", data.message);         //then find the img src and change to data.message
+//     $('#generateDoggoBtn').html('Generate Doggo').prop('disabled', false) //enable the button and name
+//     console.log('replaced image')
     
-    }
-    else {
-    $('<img src="" class="img1">').appendTo('#doggoContainer').attr("src",data.message)   // else append and img to container
-      $('#generateDoggoBtn').html('Generate Doggo').prop('disabled', false)               //enable the button and name
-      console.log('created new img')
-    }
-  }
-    
-     
+//     }
+//     else {
+//     $('<img src="" class="img1">').appendTo('#doggoContainer').attr("src",data.message)   // else append and img to container
+//       $('#generateDoggoBtn').html('Generate Doggo').prop('disabled', false)               //enable the button and name
+//       console.log('created new img')
+//     }
+//   }
+    //lee's solution
+  // $('#doggoContainer').html('<img src="' + data.message + '"/>')
+  // $('#generateDoggoBtn').html('Generate Doggo').attr('disabled', false)
   
   
  
@@ -147,8 +148,113 @@
   //    You should now be able to view random pictures of specific dog breeds via the menu!
   //
 
-  // TODO: your code goes here :)
+  $( document ).ready(function() {
+  })
 
+  $('#generateDoggoBtn').click(clickDoggoBtn)
+
+  //=====================GET JSON DATA AND DISABLE BUTTON (ADD MESSAGE TO BUTTON)=====================
+
+  
+
+  function clickDoggoBtn () {
+    console.log('you clicked the doggo button! fetching the JSON now..')
+    $('#generateDoggoBtn').html('Generating Doggo...').prop('disabled', true)//DISABLE BUTTON AND CHANGE TEXT
+      var selectedDog = $(".dog-selector option:selected").val(); //GET BREED SELECTED FROM DROPDOWN
+      dogBreedSelected = selectedDog.replace(/-/g, '/');//REPLACE CURRENT SELECTED DOG BREED
+      $.getJSON("https://dog.ceo/api/breed/" + dogBreedSelected + "/images/random", function(result) {  //HTML OF DOG BREED LINK
+        $("#doggoContainer").html("<img src='" + result.message + "'>"); //DOG IMG SRC
+        $('#generateDoggoBtn').html('Generate Doggo').prop('disabled', false) //ENABLE BUTTON AND CHANGE TEXT TO ORIGINAL
+      });
+  
+    }
+  
+  $.ajax({
+    type: "POST",
+    url: 'https://dog.ceo/api/breeds/list',
+    success: function(data){
+      $('#selectBreedContainer').html('<select class="dog-selector"></select>')
+      var selectValues = data.message;
+      for (var i=0;i<selectValues.length;i++){
+        $('<option/>').val(selectValues[i]).html(selectValues[i]).appendTo('#selectBreedContainer select');
+
+    }
+  }
+   });
+
+
+
+
+
+   //lee's SOLUTION
+        
+  // $(document).ready(function (){})
+ 
+  // $.ajax ({
+  //   method: 'GET',
+  //   url: 'https://dog.ceo/api/breeds/list',
+  //   success: function(data) {
+  //     console.log(data.message)
+  //     console.log(data.message[12])
+  //     let optionsList = $.map(data.message, function(x) {
+  //       return `<option value="${x}" >${x}</option>`
+      
+  //     })
+  //     let joined = optionsList.join('')
+  //     console.log(joined)
+  //     $('#mySelector').html(joined)
+  //   }
+  // })
+
+  // $('#selectBreedContainer').append('<select id="mySelector"></select>')
+
+
+
+// var helpers =
+// {
+//     buildDropdown: function(result, dropdown, emptyMessage)
+//     {
+//         // Remove current options
+//         dropdown.html('');
+//         // Add the empty option with the empty message
+//         dropdown.append('<option value="">' + emptyMessage + '</option>');
+//         // Check result isnt empty
+//         if(result != '')
+//         {
+//             // Loop through each of the results and append the option to the dropdown
+//             $.each(result, function(k, v) {
+//                 dropdown.append('<option value="' + v.id + '">' + v.name + '</option>');
+//             });
+//         }
+//     }
+// }
+
+
+
+
+//   $.ajax ({
+//     method: 'POST',
+//     url: 'https://dog.ceo/api/breeds/list',
+//     success: function(data)
+//     {
+//       helpers.buildDropdown(
+//         $.parseJSON(data),
+//         $('#dropdown'),
+//         'Select an option'
+//     );
+// }
+//   });
+//   $('#selectBreedContainer').html('<select></select>')
+//   $.each(updateResult, function(key, value) {
+//     $('#selectBreedContainer')
+//          .append($('<option>', { message })
+//          .text(value));
+// });
+
+  
+  // .done(function( html ) {
+  //   $( "#results" ).append( html );
+  // });
   //
   // Excellent work!
   //
