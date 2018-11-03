@@ -72,6 +72,47 @@
 
   // TODO: your code goes here :)
 
+//=====================CLICK EVENT=====================
+
+  $('#generateDoggoBtn').click(clickDoggoBtn)
+
+  //=====================GET JSON DATA AND DISABLE BUTTON (ADD MESSAGE TO BUTTON)=====================
+
+  function clickDoggoBtn () {
+    console.log('you clicked the doggo button! fetching the JSON now..')
+    $.getJSON('https://dog.ceo/api/breeds/image/random', receiveRandomDog)
+    // $('#doggoContainer').getJSON('https://dog.ceo/api/breeds/image/random')
+    // $('#generateDoggoBtn').remove()
+    $('#generateDoggoBtn').html('Generating Doggo...').prop('disabled', true)
+  }
+
+//=====================GENERATE CLICK EVENT=====================
+
+    function receiveRandomDog (data) { 
+    console.log('receive random dog: ')
+    console.log(data)
+    if(document.querySelectorAll("#doggoContainer img").length > 0) {     // if container has img
+      $('#doggoContainer').find('img').attr("src", data.message);         //then find the img src and change to data.message
+    $('#generateDoggoBtn').html('Generate Doggo').prop('disabled', false) //enable the button and name
+    console.log('replaced image')
+    
+    }
+    else {
+    $('<img src="" class="img1">').appendTo('#doggoContainer').attr("src",data.message)   // else append and img to container
+      $('#generateDoggoBtn').html('Generate Doggo').prop('disabled', false)               //enable the button and name
+      console.log('created new img')
+    }
+  }
+    
+     
+  
+  
+ 
+  // function
+  // $("div#doggoContainer").html("<img src="message">");
+
+
+
   //
   // Cool. Now let's kick it up a notch and allow selecting a specific breed of dog!
   //
